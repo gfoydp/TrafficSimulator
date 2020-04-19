@@ -11,7 +11,7 @@ public abstract class Event implements Comparable<Event> {
 			_time = time;
 	}
 
-	int getTime() {
+	public int getTime() {
 		return _time;
 	}
 
@@ -23,4 +23,6 @@ public abstract class Event implements Comparable<Event> {
 	}
 
 	abstract void execute(RoadMap map);
+	
+	public abstract String toString();
 }

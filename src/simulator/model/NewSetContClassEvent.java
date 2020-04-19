@@ -25,4 +25,11 @@ public class NewSetContClassEvent extends Event {
 			else throw new IllegalArgumentException("El vehiculo no existe");
 		}
 	}
+
+	@Override
+	public String toString() {
+		return "Change C02 Class";
+	}
+	
+	
 }

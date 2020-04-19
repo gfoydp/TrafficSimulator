@@ -36,7 +36,7 @@ public class StatusBar extends JPanel implements TrafficSimObserver{
 		_currTime = new JLabel(_nameTime + 0);
 		_currTime.setPreferredSize(new Dimension(120, 15));
 		this.add(_currTime);
-		//FALTAN LOS EVENTOS.
+		//FALTAN LOS EVENTOS
 	}
 
 	@Override

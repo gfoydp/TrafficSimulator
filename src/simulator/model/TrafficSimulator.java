@@ -15,6 +15,7 @@ public class TrafficSimulator implements Observable<TrafficSimObserver>{
 	private List<TrafficSimObserver> observadores;
 
 
+
 	public TrafficSimulator() {
 		mapa = new RoadMap();
 		eventos = new SortedArrayList<Event>();
@@ -25,12 +26,15 @@ public class TrafficSimulator implements Observable<TrafficSimObserver>{
 	
 	public void addEvent(Event e) {
 		eventos.add(e);
-		onEventAdded(mapa, eventos, e, tiempo);
+		for(TrafficSimObserver o : observadores) 
+			o.onEventAdded(mapa, eventos, e, tiempo);
+		
 	}
 	
 	public void advance(){
 		tiempo++;
-		onAdvanceStart(mapa,eventos,tiempo);
+		for(TrafficSimObserver o : observadores) 
+			o.onAdvanceStart(mapa,eventos,tiempo);
 		int i = 0;
 		while(i != eventos.size()) {
 			if(eventos.get(i)._time == tiempo) {
@@ -44,14 +48,17 @@ public class TrafficSimulator implements Observable<TrafficSimObserver>{
 		for (int j = 0; j < mapa.getRoads().size(); j++) {
 			mapa.getRoads().get(j).advance(tiempo);	
 		}
-		onAdvanceEnd(mapa, eventos, tiempo);
+		for(TrafficSimObserver o : observadores) 
+			o.onAdvanceEnd(mapa, eventos, tiempo);
+		
 	}
 	
 	public void reset() {
 		mapa.reset();
 		eventos.clear();
 		tiempo = 0;
-		onReset(mapa, eventos, tiempo);
+		for(TrafficSimObserver o : observadores) 
+			o.onReset(mapa, eventos, tiempo);
 	}
 	
 	public JSONObject report() {
@@ -61,21 +68,7 @@ public class TrafficSimulator implements Observable<TrafficSimObserver>{
 		return js;
 	}
 
-	void onAdvanceStart(RoadMap map, List<Event> events, int time) {
-		
-	}
-	void onAdvanceEnd(RoadMap map, List<Event> events, int time) {
-		
-	}
-	void onEventAdded(RoadMap map, List<Event> events, Event e, int time) {
-		
-	}
-	void onReset(RoadMap map, List<Event> events, int time) {
-		
-	}
-	void onRegister(RoadMap map, List<Event> events, int time) {
-		
-	}
+	
 	void onError(String err) {
 		for(TrafficSimObserver o: observadores){
 			o.onAdvanceStart(mapa, eventos, tiempo);
@@ -85,11 +78,13 @@ public class TrafficSimulator implements Observable<TrafficSimObserver>{
 	@Override
 	public void addObserver(TrafficSimObserver o) {
 		if(!observadores.contains(o))
-			observadores.add(o);		
+			observadores.add(o);	
+		o.onRegister(mapa, eventos, tiempo);
 	}
 
 	@Override
 	public void removeObserver(TrafficSimObserver o) {
 		observadores.remove(o);
+		o.onRegister(mapa, eventos, tiempo);
 	}
 }

@@ -148,7 +148,9 @@ public class ControlPanel extends JPanel implements TrafficSimObserver{
 		run.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent actionEvent) {
+				_stopped = false;
 				enableToolBar(false);
+				System.out.println(getTicks());
 				run_sim(getTicks());
 			}
 		});
@@ -219,7 +221,7 @@ public class ControlPanel extends JPanel implements TrafficSimObserver{
 			try {
 				controller.run(1);
 				} catch (Exception e) {
-					// TODO show error message
+					JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 					_stopped = true;
 					return;
 					}
@@ -229,9 +231,10 @@ public class ControlPanel extends JPanel implements TrafficSimObserver{
 					run_sim(n - 1);
 					}
 				});
-			} else 
+			} else { 
 				enableToolBar(true);
-		_stopped = true;
+				_stopped = true;
+			}
 		}
 	
 	

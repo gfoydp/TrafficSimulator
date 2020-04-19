@@ -160,8 +160,20 @@ public class Vehicle extends SimulatedObject implements Comparable<Vehicle> {
 	}
 
 
-	int getVelact() {
+	public int getVelact() {
 		return velact;
+	}
+	
+	public int getMaxSpeed() {
+		return maxSpeed;
+	}
+	
+	public int getTotalCont() {
+		return totalCont;
+	}
+	
+	public int getTotalDistance() {
+		return totalDistance;
 	}
 
 

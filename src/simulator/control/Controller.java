@@ -51,6 +51,12 @@ public class Controller {
 		printer.println(js.toString(1));
 	}
 	
+	public void run(int n) {
+		for(int i = 0; i < n; i++) {
+			simulador.advance();
+		}
+	}
+	
 	
 	public void reset() {
 		simulador.reset();

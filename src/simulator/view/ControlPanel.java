@@ -26,6 +26,7 @@ import javax.swing.JSpinner;
 import javax.swing.JToolBar;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
 
 import org.json.JSONObject;
 
@@ -42,20 +43,15 @@ public class ControlPanel extends JPanel implements TrafficSimObserver{
 	
 	Controller controller;
 	
-	private boolean activado;
-	private JButton load;
-	private JButton contaminacion;
-	private JButton weather;
-	private JButton run;
-	private JButton stop;
-	private JButton exit;
+	private JButton load , contaminacion, weather, run, stop , exit;
 	private JSpinner ticks;
 	private JFileChooser fc;
+	private boolean _stopped;
 	
 
 	public ControlPanel(Controller _ctrl) { 
 		controller = _ctrl;
-		activado = false;
+		_stopped = true;
 		initGUI();
 		controller.addObserver(this);
 	}
@@ -152,8 +148,8 @@ public class ControlPanel extends JPanel implements TrafficSimObserver{
 		run.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent actionEvent) {
-				activado = false;
-				activarBotones(activado);
+				enableToolBar(false);
+				run_sim(getTicks());
 			}
 		});
 		toolbar.add(run);
@@ -165,8 +161,7 @@ public class ControlPanel extends JPanel implements TrafficSimObserver{
 		stop.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent actionEvent) {
-				activado = true;
-				activarBotones(activado);
+				enableToolBar(true);
 			}
 		});
 		toolbar.add(stop);
@@ -200,7 +195,7 @@ public class ControlPanel extends JPanel implements TrafficSimObserver{
 
 	}
 	
-	void activarBotones(boolean b) {
+	void enableToolBar(boolean b) {
 		load.setEnabled(b);
 		contaminacion.setEnabled(b);
 		weather.setEnabled(b);
@@ -208,6 +203,44 @@ public class ControlPanel extends JPanel implements TrafficSimObserver{
 		exit.setEnabled(b);
 	}
 
+	
+	
+	
+	
+	
+	
+	
+	
+	
+
+	
+	private void run_sim(int n) {
+		if (n > 0 && !_stopped) {
+			try {
+				controller.run(1);
+				} catch (Exception e) {
+					// TODO show error message
+					_stopped = true;
+					return;
+					}
+			SwingUtilities.invokeLater(new Runnable() {
+				@Override
+				public void run() {
+					run_sim(n - 1);
+					}
+				});
+			} else 
+				enableToolBar(true);
+		_stopped = true;
+		}
+	
+	
+private void stop() {
+		_stopped = true;
+		}
+
+	
+	
 	@Override
 	public void onAdvanceStart(RoadMap map, List<Event> events, int time) {
 		// TODO Auto-generated method stub

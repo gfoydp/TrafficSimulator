@@ -60,7 +60,7 @@ public class JunctionsTableModel extends AbstractTableModel implements TrafficSi
 				obj = "NONE";
 		}
 		if(columnIndex == 2) {
-			obj = _junction.get(rowIndex).getInRoads();
+			obj = _junction.get(rowIndex).getColaCarretera();
 
 		}
 		return obj;

@@ -147,5 +147,10 @@ public class Junction extends SimulatedObject {
 		return Collections.unmodifiableList(new ArrayList<>(roadEntranceList));
 	}
 
+	public Map<Road, List<Vehicle>> getColaCarretera() {
+		return Collections.unmodifiableMap(new HashMap<>(colaCarretera));
+	}
+
+
 }
 

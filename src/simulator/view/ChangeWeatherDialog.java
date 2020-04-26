@@ -4,6 +4,7 @@ import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.Box;
@@ -18,17 +19,31 @@ import javax.swing.JSpinner;
 import javax.swing.JTextArea;
 import javax.swing.UIManager;
 
-import extra.dialog.Dish;
+import com.sun.jdi.event.Event;
+
+import simulator.misc.Pair;
+import simulator.model.Road;
+import simulator.model.SetWeatherEvent;
+import simulator.model.Weather;
+
 
 public class ChangeWeatherDialog extends JDialog{
 
 	private static final long serialVersionUID = 1L; //NO SE.
 	
 	private int _status;
-	private JComboBox<Dish> _dishes;
-	private DefaultComboBoxModel<Dish> _dishesModel;
+	private JComboBox<Road> _roads;
+	private DefaultComboBoxModel<Road> _roadsModel;
+	private List<Road> roads;
+	Weather w [] = {Weather.CLOUDY,Weather.RAINY, Weather.STORM, Weather.SUNNY,Weather.WINDY};
+	JSpinner ticks;
+	JComboBox weather;
+	SetWeatherEvent event = null;
+
+
 
 	public ChangeWeatherDialog() {
+		roads = new ArrayList<>();
 		initGUI();
 	}
 
@@ -36,7 +51,7 @@ public class ChangeWeatherDialog extends JDialog{
 
 		_status = 0;
 
-		setTitle("Change CO2 Class");
+		setTitle("Change Road Weather");
 		JPanel mainPanel = new JPanel();
 		mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
 		setContentPane(mainPanel);
@@ -62,17 +77,16 @@ public class ChangeWeatherDialog extends JDialog{
 
 		mainPanel.add(buttonsPanel);
 
-		_dishesModel = new DefaultComboBoxModel<>();
-		_dishes = new JComboBox<>(_dishesModel);
-		
-		JComboBox <String> s = new JComboBox<>();
-		JSpinner sp = new JSpinner();
+		_roadsModel = new DefaultComboBoxModel<>();
+		_roads = new JComboBox<>(_roadsModel);
+		ticks = new JSpinner();
+		weather = new JComboBox(w);
 		viewsPanel.add(new JLabel("Road: "));
-		viewsPanel.add(s);
+		viewsPanel.add(_roads);
 		viewsPanel.add(new JLabel("Weather: "));
-		viewsPanel.add(_dishes);
+		viewsPanel.add(weather);
 		viewsPanel.add(new JLabel("Ticks: "));
-		viewsPanel.add(sp);
+		viewsPanel.add(ticks);
 		
 
 		JButton cancelButton = new JButton("Cancel");
@@ -91,8 +105,11 @@ public class ChangeWeatherDialog extends JDialog{
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if (_dishesModel.getSelectedItem() != null) {
-					_status = 1;
+				if (_roadsModel.getSelectedItem() != null) {
+					List<Pair<String,Weather>> pair = new ArrayList();
+					Pair<String,Weather> p = new Pair<String,Weather>(getRoad(),getWeather());
+					pair.add(p);
+					event = new SetWeatherEvent(getTicks(),pair);
 					ChangeWeatherDialog.this.setVisible(false);
 				}
 			}
@@ -104,14 +121,14 @@ public class ChangeWeatherDialog extends JDialog{
 		setVisible(true);
 	}
 
-	public int open(List<Dish> dishes) {
+	public int open(List<Road> roads) {
 
 		// update the comboxBox model -- if you always use the same no
 		// need to update it, you can initialize it in the constructor.
 		//
-		_dishesModel.removeAllElements();
-		for (Dish v : dishes)
-			_dishesModel.addElement(v);
+		_roadsModel.removeAllElements();
+		for (Road v : roads)
+			_roadsModel.addElement(v);
 
 		// You can chenge this to place the dialog in the middle of the parent window.
 		// It can be done using uing getParent().getWidth, this.getWidth(),
@@ -123,10 +140,19 @@ public class ChangeWeatherDialog extends JDialog{
 		return _status;
 	}
 
-	Dish getDish() {
-		return (Dish) _dishesModel.getSelectedItem();
+	public String getRoad() {
+		return _roadsModel.getSelectedItem().toString();
+	}
+	public int getTicks() {
+		return (int) ticks.getValue();
+	}
+	public Weather getWeather() {
+		return (Weather) weather.getSelectedItem();
 	}
 
+	public SetWeatherEvent getEvent() {
+		return event;
+	}
 }
 
 

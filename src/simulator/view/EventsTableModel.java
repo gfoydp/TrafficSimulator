@@ -11,7 +11,7 @@ import simulator.model.TrafficSimObserver;
 
 public class EventsTableModel extends AbstractTableModel implements TrafficSimObserver {
 	
-	private static final long serialVersionUID = 1L; //NO SE.
+	private static final long serialVersionUID = 1L; 
 	private final String columnNames[] = {"Time", "Desc."};
 	private List<Event> _events;
 

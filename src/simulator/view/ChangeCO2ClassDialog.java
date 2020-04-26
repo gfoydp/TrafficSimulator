@@ -65,13 +65,15 @@ public class ChangeCO2ClassDialog extends JDialog{
 
 		_dishesModel = new DefaultComboBoxModel<>();
 		_dishes = new JComboBox<>(_dishesModel);
-		
+		Integer i[]= {0,1,2,3,4,5,6,7,8,9};
 		JComboBox <String> s = new JComboBox<>();
+		JComboBox  jc = new JComboBox(i);
+
 		JSpinner sp = new JSpinner();
 		viewsPanel.add(new JLabel("Vehicle: "));
 		viewsPanel.add(s);
 		viewsPanel.add(new JLabel("C02 Class: "));
-		viewsPanel.add(_dishes);
+		viewsPanel.add(jc);
 		viewsPanel.add(new JLabel("Ticks: "));
 		viewsPanel.add(sp);
 		

@@ -62,7 +62,6 @@ public class Controller {
 		simulador.reset();
 	}
 
-
 	public void addObserver(TrafficSimObserver o){
 		simulador.addObserver(o);
 	}

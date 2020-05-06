@@ -4,6 +4,7 @@ import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.Box;
@@ -19,16 +20,29 @@ import javax.swing.JTextArea;
 import javax.swing.UIManager;
 
 import extra.dialog.Dish;
+import simulator.control.Controller;
+import simulator.misc.Pair;
+import simulator.model.NewSetContClassEvent;
+import simulator.model.Road;
+import simulator.model.SetWeatherEvent;
+import simulator.model.Vehicle;
+import simulator.model.Weather;
 
 public class ChangeCO2ClassDialog extends JDialog{
 
-	private static final long serialVersionUID = 1L; //NO SE.
+	private static final long serialVersionUID = 1L;
 	
 	private int _status;
-	private JComboBox<Dish> _dishes;
-	private DefaultComboBoxModel<Dish> _dishesModel;
-
-	public ChangeCO2ClassDialog() {
+	private JComboBox<Vehicle> _vehicles;
+	private JComboBox  ContClass;
+	private DefaultComboBoxModel<Vehicle> _vehiclesModel;
+	private Controller ctr;
+	private JSpinner ticks;
+	private int _time;
+	
+	public ChangeCO2ClassDialog(Controller ctr, int time) {
+		_time = time;
+		this.ctr = ctr;
 		initGUI();
 	}
 
@@ -49,42 +63,43 @@ public class ChangeCO2ClassDialog extends JDialog{
 
 		mainPanel.add(helpMsg);
 
-		mainPanel.add(Box.createRigidArea(new Dimension(0, 20)));
+		mainPanel.add(Box.createRigidArea(new Dimension(0, 10)));
 
 		JPanel viewsPanel = new JPanel();
 		viewsPanel.setAlignmentX(CENTER_ALIGNMENT);
 		mainPanel.add(viewsPanel);
 
-		mainPanel.add(Box.createRigidArea(new Dimension(0, 20)));
+		mainPanel.add(Box.createRigidArea(new Dimension(0, 10)));
 
 		JPanel buttonsPanel = new JPanel();
 		buttonsPanel.setAlignmentX(CENTER_ALIGNMENT);
-		//buttonsPanel.setAlignmentY(CENTER_ALIGNMENT);
 
 		mainPanel.add(buttonsPanel);
 
-		_dishesModel = new DefaultComboBoxModel<>();
-		_dishes = new JComboBox<>(_dishesModel);
+		_vehiclesModel = new DefaultComboBoxModel<>();
+		_vehicles = new JComboBox<>(_vehiclesModel);
 		Integer i[]= {0,1,2,3,4,5,6,7,8,9};
-		JComboBox <String> s = new JComboBox<>();
-		JComboBox  jc = new JComboBox(i);
+		_vehicles.setPreferredSize(new Dimension(45, 25));
 
-		JSpinner sp = new JSpinner();
+		ContClass = new JComboBox(i);
+		ContClass.setPreferredSize(new Dimension(45, 25));
+
+		ticks = new JSpinner();
+		ticks.setPreferredSize(new Dimension(45, 25));
+		
 		viewsPanel.add(new JLabel("Vehicle: "));
-		viewsPanel.add(s);
+		viewsPanel.add(_vehicles);
 		viewsPanel.add(new JLabel("C02 Class: "));
-		viewsPanel.add(jc);
+		viewsPanel.add(ContClass);
 		viewsPanel.add(new JLabel("Ticks: "));
-		viewsPanel.add(sp);
+		viewsPanel.add(ticks);
 		
 
 		JButton cancelButton = new JButton("Cancel");
 		cancelButton.addActionListener(new ActionListener() {
-
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				_status = 0;
-				ChangeCO2ClassDialog.this.setVisible(false);
+			setVisible(false);
 			}
 		});
 		buttonsPanel.add(cancelButton);
@@ -94,8 +109,10 @@ public class ChangeCO2ClassDialog extends JDialog{
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if (_dishesModel.getSelectedItem() != null) {
-					_status = 1;
+				if (_vehiclesModel.getSelectedItem() != null) {
+					List<Pair<String,Integer>> pair = new ArrayList<>();
+					pair.add(new Pair<String,Integer>(getVehicle(),getContClass()));
+					ctr.addEvent(new NewSetContClassEvent(getTicks(), pair));
 					ChangeCO2ClassDialog.this.setVisible(false);
 				}
 			}
@@ -104,31 +121,27 @@ public class ChangeCO2ClassDialog extends JDialog{
 
 		setPreferredSize(new Dimension(400, 180));
 		pack();
+	}
+
+	public void open(List<Vehicle> vehicles) {
+
+		_vehiclesModel.removeAllElements();
+		for (Vehicle v : vehicles)
+			_vehiclesModel.addElement(v);
+
 		setVisible(true);
 	}
 
-	public int open(List<Dish> dishes) {
-
-		// update the comboxBox model -- if you always use the same no
-		// need to update it, you can initialize it in the constructor.
-		//
-		_dishesModel.removeAllElements();
-		for (Dish v : dishes)
-			_dishesModel.addElement(v);
-
-		// You can chenge this to place the dialog in the middle of the parent window.
-		// It can be done using uing getParent().getWidth, this.getWidth(),
-		// getParent().getHeight, and this.getHeight(), etc.
-		//
-		setLocation(getParent().getLocation().x + 10, getParent().getLocation().y + 10);
-
-		setVisible(true);
-		return _status;
+	public String getVehicle() {
+		return _vehiclesModel.getSelectedItem().toString();
 	}
-
-	Dish getDish() {
-		return (Dish) _dishesModel.getSelectedItem();
+	public int getTicks() {
+		return (int) ticks.getValue() + _time;
 	}
+	public int getContClass() {
+		return (int) ContClass.getSelectedItem();
+	}
+	
 
 }
 

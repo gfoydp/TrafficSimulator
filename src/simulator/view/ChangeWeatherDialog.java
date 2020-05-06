@@ -21,7 +21,9 @@ import javax.swing.UIManager;
 
 import com.sun.jdi.event.Event;
 
+import simulator.control.Controller;
 import simulator.misc.Pair;
+import simulator.model.NewSetContClassEvent;
 import simulator.model.Road;
 import simulator.model.SetWeatherEvent;
 import simulator.model.Weather;
@@ -34,16 +36,18 @@ public class ChangeWeatherDialog extends JDialog{
 	private int _status;
 	private JComboBox<Road> _roads;
 	private DefaultComboBoxModel<Road> _roadsModel;
-	private List<Road> roads;
 	Weather w [] = {Weather.CLOUDY,Weather.RAINY, Weather.STORM, Weather.SUNNY,Weather.WINDY};
 	JSpinner ticks;
 	JComboBox weather;
 	SetWeatherEvent event = null;
+	Controller ctr;
+	int _time;
 
 
 
-	public ChangeWeatherDialog() {
-		roads = new ArrayList<>();
+	public ChangeWeatherDialog(Controller ctr, int time) {
+		time = _time;
+		this.ctr = ctr;
 		initGUI();
 	}
 
@@ -79,7 +83,10 @@ public class ChangeWeatherDialog extends JDialog{
 
 		_roadsModel = new DefaultComboBoxModel<>();
 		_roads = new JComboBox<>(_roadsModel);
+		_roads.setPreferredSize(new Dimension(45, 25));
 		ticks = new JSpinner();
+		ticks.setPreferredSize(new Dimension(45, 25));
+
 		weather = new JComboBox(w);
 		viewsPanel.add(new JLabel("Road: "));
 		viewsPanel.add(_roads);
@@ -106,10 +113,9 @@ public class ChangeWeatherDialog extends JDialog{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if (_roadsModel.getSelectedItem() != null) {
-					List<Pair<String,Weather>> pair = new ArrayList();
-					Pair<String,Weather> p = new Pair<String,Weather>(getRoad(),getWeather());
-					pair.add(p);
-					event = new SetWeatherEvent(getTicks(),pair);
+					List<Pair<String,Weather>> pair = new ArrayList<>();
+					pair.add(new Pair<String,Weather>(getRoad(),getWeather()));
+					ctr.addEvent(new SetWeatherEvent(getTicks(), pair));
 					ChangeWeatherDialog.this.setVisible(false);
 				}
 			}
@@ -123,20 +129,10 @@ public class ChangeWeatherDialog extends JDialog{
 
 	public int open(List<Road> roads) {
 
-		// update the comboxBox model -- if you always use the same no
-		// need to update it, you can initialize it in the constructor.
-		//
 		_roadsModel.removeAllElements();
 		for (Road v : roads)
 			_roadsModel.addElement(v);
 
-		// You can chenge this to place the dialog in the middle of the parent window.
-		// It can be done using uing getParent().getWidth, this.getWidth(),
-		// getParent().getHeight, and this.getHeight(), etc.
-		//
-		setLocation(getParent().getLocation().x + 10, getParent().getLocation().y + 10);
-
-		setVisible(true);
 		return _status;
 	}
 
@@ -144,15 +140,12 @@ public class ChangeWeatherDialog extends JDialog{
 		return _roadsModel.getSelectedItem().toString();
 	}
 	public int getTicks() {
-		return (int) ticks.getValue();
+		return (int) ticks.getValue() + _time;
 	}
 	public Weather getWeather() {
 		return (Weather) weather.getSelectedItem();
 	}
 
-	public SetWeatherEvent getEvent() {
-		return event;
-	}
 }
 
 

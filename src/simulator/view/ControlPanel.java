@@ -36,6 +36,7 @@ import simulator.model.Event;
 import simulator.model.Road;
 import simulator.model.RoadMap;
 import simulator.model.TrafficSimObserver;
+import simulator.model.Vehicle;
 
 
 public class ControlPanel extends JPanel implements TrafficSimObserver{
@@ -48,8 +49,12 @@ public class ControlPanel extends JPanel implements TrafficSimObserver{
 	private JSpinner ticks;
 	private JFileChooser fc;
 	private boolean _stopped;
-	List<Road> _roads ;
-	ChangeWeatherDialog cccd = null;
+	private int _time;
+	List<Road> _roads;
+	List<Vehicle> _vehicles ;
+
+	ChangeWeatherDialog cwd = null;
+	ChangeCO2ClassDialog cccd = null;
 
 	
 
@@ -100,20 +105,8 @@ public class ControlPanel extends JPanel implements TrafficSimObserver{
 		contaminacion.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent actionEvent) {
-				ChangeCO2ClassDialog cccd = new ChangeCO2ClassDialog();
-				List<Dish> dishes = new ArrayList<Dish>();
-				for (int i = 0; i < 10; i++) {
-					
-					dishes.add(new Dish("" + i));
-				}
-
-				int status = cccd.open(dishes);
-
-				if (status == 0) {
-					System.out.println("Canceled");
-				} else {
-					System.out.println("Your favorite dish is: " + cccd.getDish());
-				}
+				ChangeCO2ClassDialog cccd = new ChangeCO2ClassDialog(controller,_time);
+				cccd.open(_vehicles);
 		}});
 		
 	
@@ -126,8 +119,8 @@ public class ControlPanel extends JPanel implements TrafficSimObserver{
 		weather.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent actionEvent) {
-				cccd = new ChangeWeatherDialog();
-				cccd.open(_roads);
+				cwd = new ChangeWeatherDialog(controller, _time);
+				cwd.open(_roads);
 				
 		}});
 
@@ -230,6 +223,10 @@ private void stop() {
 	@Override
 	public void onAdvanceStart(RoadMap map, List<Event> events, int time) {
 		_roads = map.getRoads();
+		_vehicles = map.getVehicles();
+		_time = time;
+
+
 
 		// TODO Auto-generated method stub
 		
@@ -238,6 +235,10 @@ private void stop() {
 	@Override
 	public void onAdvanceEnd(RoadMap map, List<Event> events, int time) {
 		_roads = map.getRoads();
+		_vehicles = map.getVehicles();
+		_time = time;
+
+
 
 		// TODO Auto-generated method stub
 		
@@ -245,11 +246,11 @@ private void stop() {
 
 	@Override
 	public void onEventAdded(RoadMap map, List<Event> events, Event e, int time) {
-		if(cccd.getEvent()!=null && cccd!=null) {
+	/*	if(cccd.getEvent()!=null && cccd!=null) {
 			Event ev;
 			ev = cccd.getEvent();
 			events.add(ev);
-		}
+		}*/
 		
 
 		// TODO Auto-generated method stub
@@ -259,6 +260,9 @@ private void stop() {
 	@Override
 	public void onReset(RoadMap map, List<Event> events, int time) {
 		_roads = map.getRoads();
+		_vehicles = map.getVehicles();
+		_time = time;
+
 
 		// TODO Auto-generated method stub
 		
@@ -267,6 +271,9 @@ private void stop() {
 	@Override
 	public void onRegister(RoadMap map, List<Event> events, int time) {
 		_roads = map.getRoads();
+		_vehicles = map.getVehicles();
+		_time = time;
+
 		// TODO Auto-generated method stub
 		
 	}

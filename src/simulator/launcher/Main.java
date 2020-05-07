@@ -1,6 +1,7 @@
 package simulator.launcher;
 
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -182,6 +183,15 @@ public class Main {
 			TrafficSimulator simulator = new TrafficSimulator();
 			Controller ctrl = new Controller(simulator, _eventsFactory);
 			new MainWindow(ctrl);
+			if(_inFile != null) {
+				InputStream in;
+				try {
+					in = new FileInputStream(_inFile);
+					ctrl.loadEvents(in);
+				} catch (FileNotFoundException e) {
+					e.printStackTrace();
+				}
+			}
 			}
 			});
 

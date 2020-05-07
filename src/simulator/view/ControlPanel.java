@@ -136,7 +136,6 @@ public class ControlPanel extends JPanel implements TrafficSimObserver{
 			public void actionPerformed(ActionEvent actionEvent) {
 				_stopped = false;
 				enableToolBar(false);
-				System.out.println(getTicks());
 				run_sim(getTicks());
 			}
 		});

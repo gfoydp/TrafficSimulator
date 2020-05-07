@@ -35,7 +35,6 @@ public class MapByRoadComponent extends JComponent implements TrafficSimObserver
 	private static final Color _RED_LIGHT_COLOR = Color.RED;
 	private RoadMap _map;
 	private Image _car, _cloud, _c0, _c1, _c2, _c3, _c4, _c5, _rain, _storm, _sun, _wind;
-	private JLabel label;
 
 	
 	public MapByRoadComponent(Controller ctrl) {
@@ -96,6 +95,8 @@ public class MapByRoadComponent extends JComponent implements TrafficSimObserver
 			y = (i + 1)*50;
 			g.drawString(r.get(i).toString(), 20, y + 3);
 			g.drawLine(x1, y, x2, y);
+			Image image = buscar(r.get(i).getWeather().toString());
+			g.drawImage(image, x2 + 10 , y - 20, 32, 32, this);
 		}
 	}
 	
@@ -103,20 +104,17 @@ public class MapByRoadComponent extends JComponent implements TrafficSimObserver
 	private void drawVehicles(Graphics g) {
 		int  x1 = 50, x2 = getWidth() - 100;
 		List<Vehicle> v = _map.getVehicles();
-		
+		Road r;
 		for(int i = 0; i < v.size(); i++) {
-			Road r = v.get(i).getRoad();
+			r = v.get(i).getRoad();
 			int A = v.get(i).getLocalitation();
 			int B = r.getLength();
-			int y = (i + 1)*50;
+			int y = (_map.getRoads().indexOf(r) + 1)*50;
 			int x = x1 + (int) ((x2 - x1) * ((double) A / (double) B));
 			g.drawImage(_car, x, y - 10, 16, 16, this);
-			Image image = buscar(r.getWeather().toString());
-			g.drawImage(image, x2 + 10 , y - 20, 32, 32, this);
 			int C = (int) Math.floor(Math.min((double) A/(1.0 + (double) B),1.0) / 0.19);
 			Image image2 = buscar(String.valueOf(C));
 			g.drawImage(image2, x2 + 50 , y - 20, 32, 32, this);
-
 
 			g.drawString(v.get(i).toString(), x, y - 10);
 		}
@@ -154,6 +152,7 @@ public class MapByRoadComponent extends JComponent implements TrafficSimObserver
 		}
 	}
 
+
 	
 	private Image loadImage(String img) {
 		Image i = null;
@@ -170,6 +169,7 @@ public class MapByRoadComponent extends JComponent implements TrafficSimObserver
 		if(s.equalsIgnoreCase("rainy")) return _rain;
 		if(s.equalsIgnoreCase("cloudy")) return _cloud;
 		if(s.equalsIgnoreCase("windy")) return _wind;
+		if(s.equalsIgnoreCase("storm")) return _storm;
 		if(s.equalsIgnoreCase("0")) return _c0;
 		if(s.equalsIgnoreCase("1")) return _c1;
 		if(s.equalsIgnoreCase("2")) return _c2;

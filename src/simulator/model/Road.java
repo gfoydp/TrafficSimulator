@@ -111,7 +111,7 @@ public abstract class Road extends SimulatedObject {
 	abstract int calculateVehicleSpeed(Vehicle v);
 	
 
-
+	
 	public int getTotalCO2() {
 		return totalCont;
 	}

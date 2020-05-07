@@ -46,7 +46,7 @@ public class ChangeWeatherDialog extends JDialog{
 
 
 	public ChangeWeatherDialog(Controller ctr, int time) {
-		time = _time;
+		_time = time;
 		this.ctr = ctr;
 		initGUI();
 	}

@@ -136,6 +136,9 @@ public abstract class Road extends SimulatedObject {
 		return weather;
 	}
 	
+	public List<Vehicle> getVehicles() {
+		return Collections.unmodifiableList(new ArrayList<>(vehicles));
+	}
 		
 }		
 		

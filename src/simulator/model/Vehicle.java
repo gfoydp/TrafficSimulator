@@ -50,9 +50,9 @@ public class Vehicle extends SimulatedObject implements Comparable<Vehicle> {
 			
 			sLocalVelocidad = this.velact + localizacion;
 			
-			if(sLocalVelocidad > road.getLongitud()) {
+			if(sLocalVelocidad > road.getLength()) {
 				
-				this.localitation = road.getLongitud();
+				this.localitation = road.getLength();
 				
 			}else {
 				this.localitation = sLocalVelocidad;
@@ -61,7 +61,7 @@ public class Vehicle extends SimulatedObject implements Comparable<Vehicle> {
 			this.totalCont += c;
 			road.addContamination(c);
 						 
-			if(this.localitation >= road.getLongitud()) {
+			if(this.localitation >= road.getLength()) {
 				road.getCruceD().enter(this);
 			
 				this.vehicleStatus = VehicleStatus.WAITING;

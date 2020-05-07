@@ -150,6 +150,10 @@ public class Junction extends SimulatedObject {
 	public Map<Road, List<Vehicle>> getColaCarretera() {
 		return Collections.unmodifiableMap(new HashMap<>(colaCarretera));
 	}
+	public String getGreens() {
+		if(indiceDeSemaforoEnVerde == -1) return "NONE";
+		return roadEntranceList.get(indiceDeSemaforoEnVerde).toString();
+	}
 
 
 }

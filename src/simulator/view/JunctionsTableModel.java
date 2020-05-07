@@ -55,9 +55,7 @@ public class JunctionsTableModel extends AbstractTableModel implements TrafficSi
 			obj = _junction.get(rowIndex).getId();
 		}
 		if(columnIndex == 1) {
-			obj = _junction.get(rowIndex).getGreenLightIndex();
-			if(_junction.get(rowIndex).getGreenLightIndex() == -1)
-				obj = "NONE";
+			obj = _junction.get(rowIndex).getGreens();
 		}
 		if(columnIndex == 2) {
 			obj = _junction.get(rowIndex).getColaCarretera();
@@ -65,6 +63,8 @@ public class JunctionsTableModel extends AbstractTableModel implements TrafficSi
 		}
 		return obj;
 	}
+
+
 
 	@Override
 	public void onAdvanceStart(RoadMap map, List<Event> events, int time) {

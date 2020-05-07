@@ -84,7 +84,7 @@ public class MapByRoadComponent extends JComponent implements TrafficSimObserver
 		drawRoads(g);
 		drawVehicles(g);
 		drawJunctions(g);
-		//drawCO2(g);
+		drawCO2(g);
 	}
 	
 	private void drawRoads(Graphics g) {

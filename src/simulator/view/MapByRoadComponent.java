@@ -110,7 +110,15 @@ public class MapByRoadComponent extends JComponent implements TrafficSimObserver
 			int B = r.getLength();
 			int y = (i + 1)*50;
 			int x = x1 + (int) ((x2 - x1) * ((double) A / (double) B));
-			g.drawImage(_car, x, y, 16, 16, this);
+			g.drawImage(_car, x, y - 10, 16, 16, this);
+			Image image = buscar(r.getWeather().toString());
+			g.drawImage(image, x2 + 10 , y - 20, 32, 32, this);
+			int C = (int) Math.floor(Math.min((double) A/(1.0 + (double) B),1.0) / 0.19);
+			Image image2 = buscar(String.valueOf(C));
+			g.drawImage(image2, x2 + 50 , y - 20, 32, 32, this);
+
+
+			g.drawString(v.get(i).toString(), x, y - 10);
 		}
 	}
 
@@ -153,6 +161,22 @@ public class MapByRoadComponent extends JComponent implements TrafficSimObserver
 			return ImageIO.read(new File("resources/icons/" + img));
 		} catch (IOException e) {
 		}
+		return i;
+	}
+	
+	private Image buscar(String s) {
+		Image i = null;
+		if(s.equalsIgnoreCase("sunny")) return _sun;
+		if(s.equalsIgnoreCase("rainy")) return _rain;
+		if(s.equalsIgnoreCase("cloudy")) return _cloud;
+		if(s.equalsIgnoreCase("windy")) return _wind;
+		if(s.equalsIgnoreCase("0")) return _c0;
+		if(s.equalsIgnoreCase("1")) return _c1;
+		if(s.equalsIgnoreCase("2")) return _c2;
+		if(s.equalsIgnoreCase("3")) return _c3;
+		if(s.equalsIgnoreCase("4")) return _c4;
+		if(s.equalsIgnoreCase("5")) return _c5;
+
 		return i;
 	}
 	

@@ -84,7 +84,7 @@ public class MapByRoadComponent extends JComponent implements TrafficSimObserver
 		drawRoads(g);
 		drawVehicles(g);
 		drawJunctions(g);
-		drawCO2(g);
+		drawCO2Weather(g);
 	}
 	
 	private void drawRoads(Graphics g) {
@@ -96,8 +96,7 @@ public class MapByRoadComponent extends JComponent implements TrafficSimObserver
 			y = (i + 1)*50;
 			g.drawString(r.get(i).toString(), 20, y + 3);
 			g.drawLine(x1, y, x2, y);
-			Image image = buscar(r.get(i).getWeather().toString());
-			g.drawImage(image, x2 + 10 , y - 20, 32, 32, this);
+			
 		}
 	}
 	
@@ -113,27 +112,23 @@ public class MapByRoadComponent extends JComponent implements TrafficSimObserver
 			int y = (_map.getRoads().indexOf(r) + 1)*50;
 			int x = x1 + (int) ((x2 - x1) * ((double) A / (double) B));
 			g.drawImage(_car, x, y - 10, 16, 16, this);
-			/*int C = (int) Math.floor(Math.min((double) A/(1.0 + (double) B),1.0) / 0.19);
-			Image image2 = buscar(String.valueOf(C));
-			g.drawImage(image2, x2 + 50 , y - 20, 32, 32, this);*/
-
+			
 			g.drawString(v.get(i).toString(), x, y - 10);
 		}
 	}
 	
-	private void drawCO2(Graphics g) {
+	private void drawCO2Weather(Graphics g) {
 		int  x1 = 50, x2 = getWidth() - 100;
-		List<Vehicle> v = _map.getVehicles();
 		List<Road> r = _map.getRoads();
-		for(int i=0;i<r.size();i++) {
-			for(int j=0;j< r.get(i).getVehicles().size();j++) {
-				int y = (i + 1)*50;
-				int A = r.get(i).getVehicles().get(j).getLocalitation();
-				int B = r.get(i).getLength();
-				int C = (int) Math.floor(Math.min((double) A/(1.0 + (double) B),1.0) / 0.19);
-				Image image2 = buscar(String.valueOf(C));
-				g.drawImage(image2, x2 + 50 , y - 20, 32, 32, this);
-			}
+		for(int i = 0; i < r.size(); i++) {
+			int y = (i + 1)*50;
+			Image image = buscar(r.get(i).getWeather().toString());
+			g.drawImage(image, x2 + 10 , y - 20, 32, 32, this);
+			int A = r.get(i).getTotalCO2();
+			int B = r.get(i).getCO2Limit();
+			int C = (int) Math.floor(Math.min((double) A/(1.0 + (double) B),1.0) / 0.19);
+			Image image2 = buscar(String.valueOf(C));
+			g.drawImage(image2, x2 + 50 , y - 20, 32, 32, this);
 		}
 		
 	}

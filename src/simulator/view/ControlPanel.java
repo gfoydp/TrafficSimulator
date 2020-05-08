@@ -2,6 +2,7 @@ package simulator.view;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -12,31 +13,22 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.Box;
-import javax.swing.BoxLayout;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JFileChooser;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JSeparator;
-import javax.swing.JSpinner;
-import javax.swing.JToolBar;
-import javax.swing.SpinnerNumberModel;
-import javax.swing.SwingConstants;
-import javax.swing.SwingUtilities;
+import javax.swing.*;
+
 
 import org.json.JSONObject;
 
 import extra.dialog.Dish;
 import simulator.control.Controller;
+import simulator.misc.Pair;
 import simulator.model.Event;
+import simulator.model.NewSetContClassEvent;
 import simulator.model.Road;
 import simulator.model.RoadMap;
+import simulator.model.SetWeatherEvent;
 import simulator.model.TrafficSimObserver;
 import simulator.model.Vehicle;
+import simulator.model.Weather;
 
 
 public class ControlPanel extends JPanel implements TrafficSimObserver{
@@ -49,7 +41,7 @@ public class ControlPanel extends JPanel implements TrafficSimObserver{
 	private JSpinner ticks;
 	private JFileChooser fc;
 	private boolean _stopped;
-	private int _time;
+	private int _time, _status;
 	List<Road> _roads;
 	List<Vehicle> _vehicles ;
 
@@ -102,11 +94,19 @@ public class ControlPanel extends JPanel implements TrafficSimObserver{
 		contaminacion = new JButton();
 		contaminacion.setIcon(new ImageIcon("resources/icons/co2class.png"));
 		contaminacion.setToolTipText("Change C02 Class");
+		Frame f = (Frame) SwingUtilities.getWindowAncestor(this);
 		contaminacion.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent actionEvent) {
-				ChangeCO2ClassDialog cccd = new ChangeCO2ClassDialog(controller,_time);
-				cccd.open(_vehicles);
+
+				ChangeCO2ClassDialog cccd = new ChangeCO2ClassDialog(f);
+				_status = cccd.open(_vehicles);
+				if(_status == 1) {
+					List<Pair<String,Integer>> pair = new ArrayList<>();
+					pair.add(new Pair<String,Integer>(cccd.getVehicle(),cccd.getContClass()));
+					controller.addEvent(new NewSetContClassEvent(cccd.getTicks() + _time, pair));	
+				}
+				
 		}});
 		
 	
@@ -119,8 +119,12 @@ public class ControlPanel extends JPanel implements TrafficSimObserver{
 		weather.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent actionEvent) {
-				cwd = new ChangeWeatherDialog(controller, _time);
-				cwd.open(_roads);
+				cwd = new ChangeWeatherDialog(f);
+				if(cwd.open(_roads) == 1) {
+					List<Pair<String,Weather>> pair = new ArrayList<>();
+					pair.add(new Pair<String,Weather>(cwd.getRoad(),cwd.getWeather()));
+					controller.addEvent(new SetWeatherEvent(cwd.getTicks() + _time, pair));
+				}
 				
 		}});
 

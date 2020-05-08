@@ -35,19 +35,14 @@ public class ChangeWeatherDialog extends JDialog{
 	
 	private int _status;
 	private JComboBox<Road> _roads;
-	private DefaultComboBoxModel<Road> _roadsModel;
 	Weather w [] = {Weather.CLOUDY,Weather.RAINY, Weather.STORM, Weather.SUNNY,Weather.WINDY};
 	JSpinner ticks;
 	JComboBox weather;
-	SetWeatherEvent event = null;
-	Controller ctr;
-	int _time;
 
 
 
-	public ChangeWeatherDialog(Controller ctr, int time) {
-		_time = time;
-		this.ctr = ctr;
+	public ChangeWeatherDialog(Frame parent) {
+		super(parent, true);
 		initGUI();
 	}
 
@@ -81,8 +76,7 @@ public class ChangeWeatherDialog extends JDialog{
 
 		mainPanel.add(buttonsPanel);
 
-		_roadsModel = new DefaultComboBoxModel<>();
-		_roads = new JComboBox<>(_roadsModel);
+		_roads = new JComboBox<>();
 		_roads.setPreferredSize(new Dimension(45, 25));
 		ticks = new JSpinner();
 		ticks.setPreferredSize(new Dimension(45, 25));
@@ -112,10 +106,8 @@ public class ChangeWeatherDialog extends JDialog{
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if (_roadsModel.getSelectedItem() != null) {
-					List<Pair<String,Weather>> pair = new ArrayList<>();
-					pair.add(new Pair<String,Weather>(getRoad(),getWeather()));
-					ctr.addEvent(new SetWeatherEvent(getTicks(), pair));
+				if (_roads.getSelectedItem() != null) {
+					_status = 1;
 					ChangeWeatherDialog.this.setVisible(false);
 				}
 			}
@@ -124,23 +116,25 @@ public class ChangeWeatherDialog extends JDialog{
 
 		setPreferredSize(new Dimension(420, 180));
 		pack();
-		setVisible(true);
+		setVisible(false);
 	}
 
 	public int open(List<Road> roads) {
 
-		_roadsModel.removeAllElements();
+		_roads.removeAllItems();
 		for (Road v : roads)
-			_roadsModel.addElement(v);
+			_roads.addItem(v);
+		
+			setVisible(true);
 
 		return _status;
 	}
 
 	public String getRoad() {
-		return _roadsModel.getSelectedItem().toString();
+		return _roads.getSelectedItem().toString();
 	}
 	public int getTicks() {
-		return (int) ticks.getValue() + _time;
+		return (int) ticks.getValue();
 	}
 	public Weather getWeather() {
 		return (Weather) weather.getSelectedItem();

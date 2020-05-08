@@ -36,20 +36,17 @@ public class ChangeCO2ClassDialog extends JDialog{
 	private JComboBox<Vehicle> _vehicles;
 	private JComboBox  ContClass;
 	private DefaultComboBoxModel<Vehicle> _vehiclesModel;
-	private Controller ctr;
 	private JSpinner ticks;
-	private int _time;
+
 	
-	public ChangeCO2ClassDialog(Controller ctr, int time) {
-		_time = time;
-		this.ctr = ctr;
+	public ChangeCO2ClassDialog(Frame parent) {
+		super(parent, true);
 		initGUI();
 	}
 
 	private void initGUI() {
 
 		_status = 0;
-
 		setTitle("Change CO2 Class");
 		JPanel mainPanel = new JPanel();
 		mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
@@ -76,8 +73,7 @@ public class ChangeCO2ClassDialog extends JDialog{
 
 		mainPanel.add(buttonsPanel);
 
-		_vehiclesModel = new DefaultComboBoxModel<>();
-		_vehicles = new JComboBox<>(_vehiclesModel);
+		_vehicles = new JComboBox<>();
 		Integer i[]= {0,1,2,3,4,5,6,7,8,9};
 		_vehicles.setPreferredSize(new Dimension(45, 25));
 
@@ -99,6 +95,7 @@ public class ChangeCO2ClassDialog extends JDialog{
 		cancelButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+			_status = 1;
 			setVisible(false);
 			}
 		});
@@ -109,34 +106,35 @@ public class ChangeCO2ClassDialog extends JDialog{
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if (_vehiclesModel.getSelectedItem() != null) {
-					List<Pair<String,Integer>> pair = new ArrayList<>();
-					pair.add(new Pair<String,Integer>(getVehicle(),getContClass()));
-					ctr.addEvent(new NewSetContClassEvent(getTicks(), pair));
+				if (_vehicles.getSelectedItem() != null) {
+					_status = 1;
 					ChangeCO2ClassDialog.this.setVisible(false);
 				}
 			}
 		});
 		buttonsPanel.add(okButton);
-
+		
 		setPreferredSize(new Dimension(400, 180));
 		pack();
+		setVisible(false);
 	}
 
-	public void open(List<Vehicle> vehicles) {
-
-		_vehiclesModel.removeAllElements();
-		for (Vehicle v : vehicles)
-			_vehiclesModel.addElement(v);
+	public int open(List<Vehicle> vehicles) {
+		_vehicles.removeAllItems();
+		for (Vehicle v : vehicles) {
+			_vehicles.addItem(v);
+		}
 
 		setVisible(true);
+
+		return _status;
 	}
 
 	public String getVehicle() {
-		return _vehiclesModel.getSelectedItem().toString();
+		return _vehicles.getSelectedItem().toString();
 	}
 	public int getTicks() {
-		return (int) ticks.getValue() + _time;
+		return (int) ticks.getValue();
 	}
 	public int getContClass() {
 		return (int) ContClass.getSelectedItem();

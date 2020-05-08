@@ -16,12 +16,12 @@ import simulator.model.TrafficSimObserver;
 public class StatusBar extends JPanel implements TrafficSimObserver{
 
 	
-	private static final long serialVersionUID = 1L; //NO SE.
+	private static final long serialVersionUID = 1L; 
 	
 	private static final String _nameTime = " Time:  ";
 	
 	private Controller controller;
-	private JLabel _currTime; // for current time
+	private JLabel _currTime; 
 	
 	
 	public StatusBar(Controller _ctrl) {
@@ -41,25 +41,25 @@ public class StatusBar extends JPanel implements TrafficSimObserver{
 
 	@Override
 	public void onAdvanceStart(RoadMap map, List<Event> events, int time) {
-		// TODO Auto-generated method stub
+		_currTime.setText(_nameTime + time);
 		
 	}
 
 	@Override
 	public void onAdvanceEnd(RoadMap map, List<Event> events, int time) {
-		// TODO Auto-generated method stub
+		_currTime.setText(_nameTime + time);
 		
 	}
 
 	@Override
 	public void onEventAdded(RoadMap map, List<Event> events, Event e, int time) {
-		// TODO Auto-generated method stub
+		_currTime.setText(_nameTime + time);
 		
 	}
 
 	@Override
 	public void onReset(RoadMap map, List<Event> events, int time) {
-		// TODO Auto-generated method stub
+		_currTime.setText(_nameTime + time);
 		
 	}
 

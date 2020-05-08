@@ -75,7 +75,6 @@ public class MapByRoadComponent extends JComponent implements TrafficSimObserver
 			g.setColor(Color.red);
 			g.drawString("No map yet!", getWidth() / 2 - 50, getHeight() / 2);
 		} else {
-			//updatePrefferedSize();
 			drawMap(g);
 		}
 	}
@@ -96,7 +95,6 @@ public class MapByRoadComponent extends JComponent implements TrafficSimObserver
 			y = (i + 1)*50;
 			g.drawString(r.get(i).toString(), 20, y + 3);
 			g.drawLine(x1, y, x2, y);
-			
 		}
 	}
 	
@@ -106,6 +104,7 @@ public class MapByRoadComponent extends JComponent implements TrafficSimObserver
 		List<Vehicle> v = _map.getVehicles();
 		Road r;
 		for(int i = 0; i < v.size(); i++) {
+			if(v.get(i).getVehicleStatus() != VehicleStatus.ARRIVED) {
 			r = v.get(i).getRoad();
 			int A = v.get(i).getLocalitation();
 			int B = r.getLength();
@@ -114,11 +113,12 @@ public class MapByRoadComponent extends JComponent implements TrafficSimObserver
 			g.drawImage(_car, x, y - 10, 16, 16, this);
 			
 			g.drawString(v.get(i).toString(), x, y - 10);
+			}
 		}
 	}
 	
 	private void drawCO2Weather(Graphics g) {
-		int  x1 = 50, x2 = getWidth() - 100;
+		int x2 = getWidth() - 100;
 		List<Road> r = _map.getRoads();
 		for(int i = 0; i < r.size(); i++) {
 			int y = (i + 1)*50;
@@ -164,8 +164,6 @@ public class MapByRoadComponent extends JComponent implements TrafficSimObserver
 
 		}
 	}
-
-
 	
 	private Image loadImage(String img) {
 		Image i = null;

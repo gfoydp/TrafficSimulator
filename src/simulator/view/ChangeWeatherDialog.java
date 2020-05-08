@@ -19,7 +19,6 @@ import javax.swing.JSpinner;
 import javax.swing.JTextArea;
 import javax.swing.UIManager;
 
-import com.sun.jdi.event.Event;
 
 import simulator.control.Controller;
 import simulator.misc.Pair;

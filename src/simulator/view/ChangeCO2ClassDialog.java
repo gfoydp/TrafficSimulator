@@ -95,7 +95,7 @@ public class ChangeCO2ClassDialog extends JDialog{
 		cancelButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-			_status = 1;
+			_status = 0;
 			setVisible(false);
 			}
 		});

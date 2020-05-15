@@ -1,6 +1,6 @@
 package simulator.model;
 
-public class NewInterCityRoad extends Event {
+public class NewInterCityRoad extends NewRoadEvent {
 
 	private String id;
 	private String srcJun;
@@ -23,13 +23,15 @@ public class NewInterCityRoad extends Event {
 	}
 
 	@Override
-	void execute(RoadMap map) {
-		InterCityRoad NewRoad = new InterCityRoad(id, map.getJunction(srcJun), map.getJunction(destJunc), maxSpeed, co2Limit, length, weather);
-		map.addRoad(NewRoad);
+	Road execute2(RoadMap map) {
+	Road r = new InterCityRoad(id, map.getJunction(srcJun), map.getJunction(destJunc), maxSpeed, co2Limit, length, weather);
+	return r;
 	}
 
 	@Override
 	public String toString() {
 	return "New InterCityRoad '"+id+"'";
-	}	
+	}
+
+
 }

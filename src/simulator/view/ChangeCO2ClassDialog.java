@@ -4,12 +4,10 @@ import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
-import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
@@ -19,14 +17,8 @@ import javax.swing.JSpinner;
 import javax.swing.JTextArea;
 import javax.swing.UIManager;
 
-import extra.dialog.Dish;
-import simulator.control.Controller;
-import simulator.misc.Pair;
-import simulator.model.NewSetContClassEvent;
-import simulator.model.Road;
-import simulator.model.SetWeatherEvent;
 import simulator.model.Vehicle;
-import simulator.model.Weather;
+
 
 public class ChangeCO2ClassDialog extends JDialog{
 
@@ -34,8 +26,7 @@ public class ChangeCO2ClassDialog extends JDialog{
 	
 	private int _status;
 	private JComboBox<Vehicle> _vehicles;
-	private JComboBox  ContClass;
-	private DefaultComboBoxModel<Vehicle> _vehiclesModel;
+	private JComboBox<Integer>  ContClass;
 	private JSpinner ticks;
 
 	
@@ -77,7 +68,7 @@ public class ChangeCO2ClassDialog extends JDialog{
 		Integer i[]= {0,1,2,3,4,5,6,7,8,9};
 		_vehicles.setPreferredSize(new Dimension(45, 25));
 
-		ContClass = new JComboBox(i);
+		ContClass = new JComboBox<>(i);
 		ContClass.setPreferredSize(new Dimension(45, 25));
 
 		ticks = new JSpinner();

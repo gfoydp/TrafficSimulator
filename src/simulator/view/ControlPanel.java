@@ -1,6 +1,5 @@
 package simulator.view;
 
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
@@ -8,17 +7,12 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.*;
 
-
-import org.json.JSONObject;
-
-import extra.dialog.Dish;
 import simulator.control.Controller;
 import simulator.misc.Pair;
 import simulator.model.Event;
@@ -31,15 +25,17 @@ import simulator.model.Vehicle;
 import simulator.model.Weather;
 
 
-public class ControlPanel extends JPanel implements TrafficSimObserver{
+public class ControlPanel extends JPanel implements TrafficSimObserver, ActionListener{
 
-	private static final long serialVersionUID = 1L; //NO SE.
+	private static final long serialVersionUID = 1L;
 	
 	Controller controller;
 	
 	private JButton load , contaminacion, weather, run, stop , exit;
 	private JSpinner ticks;
 	private JFileChooser fc;
+	private JToolBar toolbar;
+	private Frame f;
 	private boolean _stopped;
 	private int _time, _status;
 	List<Road> _roads;
@@ -60,73 +56,29 @@ public class ControlPanel extends JPanel implements TrafficSimObserver{
 	
 	private  void initGUI() { 
 		this.setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
-		JToolBar toolbar = new JToolBar();
+		f = (Frame) SwingUtilities.getWindowAncestor(this);
+		toolbar = new JToolBar();
 		
 		load = new JButton();
 		load.setIcon(new ImageIcon("resources/icons/open.png"));
-		toolbar.add(load);
-		load.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent actionEvent) {
-				fc = new JFileChooser();
-				fc.setCurrentDirectory(new File("resources/examples"));
-				int returnVal = fc.showOpenDialog(null);
-				if(returnVal == JFileChooser.APPROVE_OPTION){
-					File file = fc.getSelectedFile();
-					controller.reset();
-					InputStream in;
-					try {
-						in = new FileInputStream(file);
-						controller.loadEvents(in);
-					} catch (FileNotFoundException e) {
-						JOptionPane.showMessageDialog(toolbar,
-								 "Error to import the events.",
-								 "Error",
-								 JOptionPane.ERROR_MESSAGE);
-					}
-					}
-		}});
-		
+		load.addActionListener(this);
 		load.setToolTipText("Load a file");
 		
+		toolbar.add(load);
+
 		toolbar.addSeparator();
 		
 		contaminacion = new JButton();
 		contaminacion.setIcon(new ImageIcon("resources/icons/co2class.png"));
 		contaminacion.setToolTipText("Change C02 Class");
-		Frame f = (Frame) SwingUtilities.getWindowAncestor(this);
-		contaminacion.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent actionEvent) {
-
-				ChangeCO2ClassDialog cccd = new ChangeCO2ClassDialog(f);
-				_status = cccd.open(_vehicles);
-				if(_status == 1) {
-					List<Pair<String,Integer>> pair = new ArrayList<>();
-					pair.add(new Pair<String,Integer>(cccd.getVehicle(),cccd.getContClass()));
-					controller.addEvent(new NewSetContClassEvent(cccd.getTicks() + _time, pair));	
-				}
-				
-		}});
-		
-	
+		contaminacion.addActionListener(this);
 
 		toolbar.add(contaminacion);
 
 		weather = new JButton();
 		weather.setIcon(new ImageIcon("resources/icons/weather.png"));
 		weather.setToolTipText("Change Road Weather");
-		weather.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent actionEvent) {
-				cwd = new ChangeWeatherDialog(f);
-				if(cwd.open(_roads) == 1) {
-					List<Pair<String,Weather>> pair = new ArrayList<>();
-					pair.add(new Pair<String,Weather>(cwd.getRoad(),cwd.getWeather()));
-					controller.addEvent(new SetWeatherEvent(cwd.getTicks() + _time, pair));
-				}
-				
-		}});
+		weather.addActionListener(this);
 
 		toolbar.add(weather);
 		
@@ -135,26 +87,15 @@ public class ControlPanel extends JPanel implements TrafficSimObserver{
 		run = new JButton();
 		run.setIcon(new ImageIcon("resources/icons/run.png"));
 		run.setToolTipText("Start the simulator");
-		run.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent actionEvent) {
-				_stopped = false;
-				enableToolBar(false);
-				run_sim(getTicks());
-			}
-		});
-		toolbar.add(run);
+		run.addActionListener(this);
 	
+		toolbar.add(run);
 		
 		stop = new JButton();
 		stop.setIcon(new ImageIcon("resources/icons/stop.png"));
 		stop.setToolTipText("Stop the simulator");
-		stop.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent actionEvent) {
-				enableToolBar(true);
-			}
-		});
+		stop.addActionListener(this);
+		
 		toolbar.add(stop);
 		
 		toolbar.add(new JLabel("Ticks: "));
@@ -168,20 +109,12 @@ public class ControlPanel extends JPanel implements TrafficSimObserver{
 		toolbar.add(Box.createHorizontalGlue());
 
 		exit = new JButton();
-
 		exit.setIcon(new ImageIcon("resources/icons/exit.png"));
 		exit.setToolTipText("Exit");
+		exit.addActionListener(this);
+		
 		toolbar.add(exit);
-		exit.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent actionEvent) {
-				Object[] options = { "Sí", "No"};
-				int n = JOptionPane.showOptionDialog(toolbar,"¿Quiere salir?","Salir",
-						 JOptionPane.YES_NO_OPTION,
-						 JOptionPane.QUESTION_MESSAGE,null ,options, options[1]);
-				if(n == 0){
-					System.exit(0);
-				}}
-		});	
+			
 		this.add(toolbar);
 
 	}
@@ -216,12 +149,77 @@ public class ControlPanel extends JPanel implements TrafficSimObserver{
 			}
 		}
 	
-	
-private void stop() {
-		_stopped = true;
-		}
+	public void actionPerformed(ActionEvent e) {
+		if(e.getSource() == load) Load();
+		else if(e.getSource() == contaminacion) Contaminacion();
+		else if(e.getSource() == weather) Weather();
+		else if(e.getSource() == run) Run();
+		else if(e.getSource() == stop) enableToolBar(true);
+		else if(e.getSource() == exit) Exit();
+
+
+	}
 
 	
+	
+	private void Load() {
+		fc = new JFileChooser();
+		fc.setCurrentDirectory(new File("resources/examples"));
+		int returnVal = fc.showOpenDialog(null);
+		if(returnVal == JFileChooser.APPROVE_OPTION){
+			File file = fc.getSelectedFile();
+			controller.reset();
+			InputStream in;
+			try {
+				in = new FileInputStream(file);
+				controller.loadEvents(in);
+			} catch (FileNotFoundException er) {
+				JOptionPane.showMessageDialog(toolbar,
+						 "Error to import the events.",
+						 "Error",
+						 JOptionPane.ERROR_MESSAGE);
+			}
+			}
+		
+	}
+	
+	private void Contaminacion() {
+
+		ChangeCO2ClassDialog cccd = new ChangeCO2ClassDialog(f);
+		_status = cccd.open(_vehicles);
+		if(_status == 1) {
+			List<Pair<String,Integer>> pair = new ArrayList<>();
+			pair.add(new Pair<String,Integer>(cccd.getVehicle(),cccd.getContClass()));
+			controller.addEvent(new NewSetContClassEvent(cccd.getTicks() + _time, pair));	
+		}
+		
+	}
+	
+	private void Weather() {
+		cwd = new ChangeWeatherDialog(f);
+		if(cwd.open(_roads) == 1) {
+			List<Pair<String,Weather>> pair = new ArrayList<>();
+			pair.add(new Pair<String,Weather>(cwd.getRoad(),cwd.getWeather()));
+			controller.addEvent(new SetWeatherEvent(cwd.getTicks() + _time, pair));
+		}
+		
+	}
+	
+	private void Run() {
+		_stopped = false;
+		enableToolBar(false);
+		run_sim(getTicks());
+	}
+	
+	private void Exit() {
+		Object[] options = { "Sí", "No"};
+		int n = JOptionPane.showOptionDialog(toolbar,"¿Quiere salir?","Salir",
+				 JOptionPane.YES_NO_OPTION,
+				 JOptionPane.QUESTION_MESSAGE,null ,options, options[1]);
+		if(n == 0){
+			System.exit(0);
+	}
+	}
 	
 	@Override
 	public void onAdvanceStart(RoadMap map, List<Event> events, int time) {
@@ -229,10 +227,6 @@ private void stop() {
 		_vehicles = map.getVehicles();
 		_time = time;
 
-
-
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
@@ -241,23 +235,11 @@ private void stop() {
 		_vehicles = map.getVehicles();
 		_time = time;
 
-
-
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
 	public void onEventAdded(RoadMap map, List<Event> events, Event e, int time) {
-	/*	if(cccd.getEvent()!=null && cccd!=null) {
-			Event ev;
-			ev = cccd.getEvent();
-			events.add(ev);
-		}*/
-		
 
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
@@ -266,9 +248,6 @@ private void stop() {
 		_vehicles = map.getVehicles();
 		_time = time;
 
-
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
@@ -277,16 +256,15 @@ private void stop() {
 		_vehicles = map.getVehicles();
 		_time = time;
 
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
 	public void onError(String err) {
-		// TODO Auto-generated method stub
 		
 	}
+	
 	public  int getTicks(){
 		return (int) ticks.getValue();
 	}
+
 }

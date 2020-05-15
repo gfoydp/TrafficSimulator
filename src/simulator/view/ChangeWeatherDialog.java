@@ -4,12 +4,10 @@ import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
-import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
@@ -19,24 +17,18 @@ import javax.swing.JSpinner;
 import javax.swing.JTextArea;
 import javax.swing.UIManager;
 
-
-import simulator.control.Controller;
-import simulator.misc.Pair;
-import simulator.model.NewSetContClassEvent;
 import simulator.model.Road;
-import simulator.model.SetWeatherEvent;
 import simulator.model.Weather;
 
 
 public class ChangeWeatherDialog extends JDialog{
 
-	private static final long serialVersionUID = 1L; //NO SE.
-	
+	private static final long serialVersionUID = 1L;
 	private int _status;
 	private JComboBox<Road> _roads;
 	Weather w [] = {Weather.CLOUDY,Weather.RAINY, Weather.STORM, Weather.SUNNY,Weather.WINDY};
 	JSpinner ticks;
-	JComboBox weather;
+	JComboBox<Weather> weather;
 
 
 
@@ -80,7 +72,7 @@ public class ChangeWeatherDialog extends JDialog{
 		ticks = new JSpinner();
 		ticks.setPreferredSize(new Dimension(45, 25));
 
-		weather = new JComboBox(w);
+		weather = new JComboBox<> (w);
 		viewsPanel.add(new JLabel("Road: "));
 		viewsPanel.add(_roads);
 		viewsPanel.add(new JLabel("Weather: "));

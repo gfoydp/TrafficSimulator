@@ -1,6 +1,6 @@
 package simulator.model;
 
-public class NewCityRoad extends Event{
+public class NewCityRoad extends NewRoadEvent{
 	
 	private String id;
 	private String srcJun;
@@ -23,9 +23,9 @@ public class NewCityRoad extends Event{
 	}
 
 	@Override
-	void execute(RoadMap map) {
-			Road road = new CityRoad(id,map.getJunction(srcJun), map.getJunction(destJunc), maxSpeed, co2Limit,length,weather);
-			map.addRoad(road);
+	Road execute2(RoadMap map) {
+		Road road = new CityRoad(id,map.getJunction(srcJun), map.getJunction(destJunc), maxSpeed, co2Limit,length,weather);
+		return road;
 	}
 	
 	@Override

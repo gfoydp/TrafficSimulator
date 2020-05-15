@@ -36,7 +36,6 @@ public class ChangeCO2ClassDialog extends JDialog{
 	}
 
 	private void initGUI() {
-
 		_status = 0;
 		setTitle("Change CO2 Class");
 		JPanel mainPanel = new JPanel();

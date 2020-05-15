@@ -38,7 +38,6 @@ public class ChangeWeatherDialog extends JDialog{
 	}
 
 	private void initGUI() {
-
 		_status = 0;
 
 		setTitle("Change Road Weather");

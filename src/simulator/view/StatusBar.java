@@ -22,6 +22,8 @@ public class StatusBar extends JPanel implements TrafficSimObserver{
 	
 	private Controller controller;
 	private JLabel _currTime; 
+	private JLabel _event;
+	List<Event> _events;
 	
 	
 	public StatusBar(Controller _ctrl) {
@@ -36,36 +38,47 @@ public class StatusBar extends JPanel implements TrafficSimObserver{
 		_currTime = new JLabel(_nameTime + 0);
 		_currTime.setPreferredSize(new Dimension(120, 15));
 		this.add(_currTime);
-		//FALTAN LOS EVENTOS.
+		_event = new JLabel("Welcome !");
+		this.add(_event);
+		}
+	
+	private void update(List<Event> events, int time) {
+		_events = events;
+		_currTime.setText(_nameTime + time);
+		for(Event e: events) {
+			_event.setText("Event added (" + e.toString() + ")");
+		}
 	}
+	
 
 	@Override
 	public void onAdvanceStart(RoadMap map, List<Event> events, int time) {
-		_currTime.setText(_nameTime + time);
+		update(events,time);
 		
 	}
 
 	@Override
 	public void onAdvanceEnd(RoadMap map, List<Event> events, int time) {
-		_currTime.setText(_nameTime + time);
+		update(events,time);
 		
 	}
 
 	@Override
 	public void onEventAdded(RoadMap map, List<Event> events, Event e, int time) {
-		_currTime.setText(_nameTime + time);
+		//update(events,time);
+		_event.setText("Event added (" + e.toString() + ")");
 		
 	}
 
 	@Override
 	public void onReset(RoadMap map, List<Event> events, int time) {
-		_currTime.setText(_nameTime + time);
+		update(events,time);
 		
 	}
 
 	@Override
 	public void onRegister(RoadMap map, List<Event> events, int time) {
-		_currTime.setText(_nameTime + time);
+		update(events,time);
 	}
 
 	@Override

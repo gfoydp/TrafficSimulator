@@ -59,7 +59,6 @@ public class StatusBar extends JPanel implements TrafficSimObserver{
 	@Override
 	public void onReset(RoadMap map, List<Event> events, int time) {
 		_currTime.setText("Time:  " + time);
-		
 	}
 
 	@Override

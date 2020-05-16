@@ -154,7 +154,10 @@ public class Junction extends SimulatedObject {
 		if(indiceDeSemaforoEnVerde == -1) return "NONE";
 		return roadEntranceList.get(indiceDeSemaforoEnVerde).toString();
 	}
-
+	public List<Vehicle> getQueue(Road r) {
+		colaCarretera.get(r);
+		return Collections.unmodifiableList(new ArrayList<>(colaCarretera.get(r)));
+	}
 
 }
 

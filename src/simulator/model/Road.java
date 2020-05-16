@@ -20,7 +20,7 @@ public abstract class Road extends SimulatedObject {
 	protected List<Vehicle> vehicles;
 	
 	
-	Road(String id, Junction cruceO, Junction cruceD, int maxSpeed, int contLimit, int length, Weather weather)throws IllegalArgumentException {
+	Road (String id, Junction cruceO, Junction cruceD, int maxSpeed, int contLimit, int length, Weather weather)throws IllegalArgumentException {
 		super(id);
 		if(maxSpeed < 0) throw new IllegalArgumentException("Velocidad no valida, debe ser mayor que 0");
 		else {

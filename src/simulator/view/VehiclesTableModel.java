@@ -10,6 +10,7 @@ import simulator.model.Event;
 import simulator.model.RoadMap;
 import simulator.model.TrafficSimObserver;
 import simulator.model.Vehicle;
+import simulator.model.VehicleStatus;
 
 public class VehiclesTableModel extends AbstractTableModel implements TrafficSimObserver{
 	
@@ -53,7 +54,18 @@ public class VehiclesTableModel extends AbstractTableModel implements TrafficSim
 			obj = _vehicles.get(rowIndex).getId();
 		}
 		if(columnIndex == 1) {
-			obj =  _vehicles.get(rowIndex).getRoad() + ":" + _vehicles.get(rowIndex).getLocalitation();
+			if(_vehicles.get(rowIndex).getVehicleStatus() == VehicleStatus.TRAVELING) {
+			obj =  _vehicles.get(rowIndex).getRoad() + ":" + _vehicles.get(rowIndex).getLocalitation();}
+			else if (_vehicles.get(rowIndex).getVehicleStatus() == VehicleStatus.WAITING) {
+				obj =  "Waiting :" + _vehicles.get(rowIndex).getRoad().getCruceD();
+			}
+			else if (_vehicles.get(rowIndex).getVehicleStatus() == VehicleStatus.PENDING) {
+				obj =  "Pending";
+			}
+			else if (_vehicles.get(rowIndex).getVehicleStatus() == VehicleStatus.ARRIVED) {
+				obj =  "Arrived";
+			}
+			
 		}
 		if(columnIndex == 2) {
 			obj =_vehicles.get(rowIndex).getItinerary();
@@ -88,7 +100,8 @@ public class VehiclesTableModel extends AbstractTableModel implements TrafficSim
 
 	@Override
 	public void onEventAdded(RoadMap map, List<Event> events, Event e, int time) {
-		updateTable(map.getVehicles());			}
+		updateTable(map.getVehicles());			
+		}
 
 	@Override
 	public void onReset(RoadMap map, List<Event> events, int time) {

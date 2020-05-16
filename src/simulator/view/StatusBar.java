@@ -17,9 +17,7 @@ public class StatusBar extends JPanel implements TrafficSimObserver{
 
 	
 	private static final long serialVersionUID = 1L; 
-	
-	private static final String _nameTime = " Time:  ";
-	
+		
 	private Controller controller;
 	private JLabel _currTime; 
 	private JLabel _event;
@@ -35,7 +33,7 @@ public class StatusBar extends JPanel implements TrafficSimObserver{
 	private void initGUI() {
 		this.setLayout(new FlowLayout(FlowLayout.LEFT));
 		this.setBorder(BorderFactory.createBevelBorder(1));
-		_currTime = new JLabel(_nameTime + 0);
+		_currTime = new JLabel("Time:  " + 0);
 		_currTime.setPreferredSize(new Dimension(120, 15));
 		this.add(_currTime);
 		_event = new JLabel("Welcome !");
@@ -49,7 +47,7 @@ public class StatusBar extends JPanel implements TrafficSimObserver{
 
 	@Override
 	public void onAdvanceEnd(RoadMap map, List<Event> events, int time) {
-		_currTime.setText(_nameTime + time);
+		_currTime.setText("Time:  " + time);
 	}
 
 	@Override
@@ -60,7 +58,7 @@ public class StatusBar extends JPanel implements TrafficSimObserver{
 
 	@Override
 	public void onReset(RoadMap map, List<Event> events, int time) {
-		_currTime.setText(_nameTime + time);
+		_currTime.setText("Time:  " + time);
 		
 	}
 

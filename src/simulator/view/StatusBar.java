@@ -42,48 +42,34 @@ public class StatusBar extends JPanel implements TrafficSimObserver{
 		this.add(_event);
 		}
 	
-	private void update(List<Event> events, int time) {
-		_events = events;
-		_currTime.setText(_nameTime + time);
-		for(Event e: events) {
-			_event.setText("Event added (" + e.toString() + ")");
-		}
-	}
-	
 
 	@Override
 	public void onAdvanceStart(RoadMap map, List<Event> events, int time) {
-		update(events,time);
-		
 	}
 
 	@Override
 	public void onAdvanceEnd(RoadMap map, List<Event> events, int time) {
-		update(events,time);
-		
+		_currTime.setText(_nameTime + time);
 	}
 
 	@Override
 	public void onEventAdded(RoadMap map, List<Event> events, Event e, int time) {
-		//update(events,time);
 		_event.setText("Event added (" + e.toString() + ")");
 		
 	}
 
 	@Override
 	public void onReset(RoadMap map, List<Event> events, int time) {
-		update(events,time);
+		_currTime.setText(_nameTime + time);
 		
 	}
 
 	@Override
 	public void onRegister(RoadMap map, List<Event> events, int time) {
-		update(events,time);
 	}
 
 	@Override
 	public void onError(String err) {
-		// TODO Auto-generated method stub
 		
 	}
 

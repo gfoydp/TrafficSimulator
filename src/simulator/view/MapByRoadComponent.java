@@ -24,7 +24,8 @@ import simulator.model.VehicleStatus;
 public class MapByRoadComponent extends JComponent implements TrafficSimObserver {
 
 	
-	private static final long serialVersionUID = 1L; 
+	private static final long serialVersionUID = 1L;
+	
 	private static final Color _BG_COLOR = Color.WHITE;
 	private static final int _JRADIUS = 10;
 	private static final Color _JUNCTION_COLOR = Color.BLUE;
@@ -55,8 +56,6 @@ public class MapByRoadComponent extends JComponent implements TrafficSimObserver
 		_storm = loadImage("storm.png");
 		_sun = loadImage("sun.png");
 		_wind = loadImage("wind.png");
-
-
 	}
 	
 	public void paintComponent(Graphics graphics) {

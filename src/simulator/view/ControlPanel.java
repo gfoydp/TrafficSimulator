@@ -162,7 +162,6 @@ public class ControlPanel extends JPanel implements TrafficSimObserver, ActionLi
 	}
 
 	
-	
 	private void Load() {
 		fc = new JFileChooser();
 		fc.setCurrentDirectory(new File("resources/examples"));
@@ -179,10 +178,9 @@ public class ControlPanel extends JPanel implements TrafficSimObserver, ActionLi
 						 "Error to import the events.",
 						 "Error",
 						 JOptionPane.ERROR_MESSAGE);
+				}
 			}
-			}
-		
-	}
+		}
 	
 	private void Contaminacion() {
 
@@ -213,13 +211,10 @@ public class ControlPanel extends JPanel implements TrafficSimObserver, ActionLi
 	}
 	
 	private void Exit() {
-		Object[] options = { "Sí", "No"};
-		int n = JOptionPane.showOptionDialog(toolbar,"¿Quiere salir?","Salir",
-				 JOptionPane.YES_NO_OPTION,
-				 JOptionPane.QUESTION_MESSAGE,null ,options, options[1]);
-		if(n == 0){
-			System.exit(0);
-	}
+		ImageIcon icon = new ImageIcon("resources/icons/exit.png");
+	   	int n = JOptionPane.showOptionDialog(this, "Are sure you want to quit?", "Quit", JOptionPane.YES_NO_OPTION,
+	   			JOptionPane.PLAIN_MESSAGE, icon, null, null);
+	   	if(n == 0) System.exit(0);
 	}
 	
 	void update(RoadMap map, int time) {

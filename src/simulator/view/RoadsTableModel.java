@@ -14,7 +14,7 @@ import simulator.model.Road;
 public class RoadsTableModel extends AbstractTableModel implements TrafficSimObserver{
 	
 	
-	private static final long serialVersionUID = 1L; //NO SE
+	private static final long serialVersionUID = 1L;
 
 	private final String columnNames[] = {"Id", "Lenght", "Weather", "Max. Speed", "Speed Limit", "Total CO2", "CO2 Limit"};
 	private List<Road> _roads;
@@ -75,7 +75,7 @@ public class RoadsTableModel extends AbstractTableModel implements TrafficSimObs
 
 	@Override
 	public void onAdvanceStart(RoadMap map, List<Event> events, int time) {
-		updateTable(map.getRoads());				
+				
 	}
 
 	@Override
@@ -100,7 +100,6 @@ public class RoadsTableModel extends AbstractTableModel implements TrafficSimObs
 
 	@Override
 	public void onError(String err) {
-		// TODO Auto-generated method stub
 		
 	}
 }

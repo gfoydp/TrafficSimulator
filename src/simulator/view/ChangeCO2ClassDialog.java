@@ -120,14 +120,15 @@ public class ChangeCO2ClassDialog extends JDialog{
 		return _status;
 	}
 
-	public String getVehicle() {
-		return _vehicles.getSelectedItem().toString();
+	public Vehicle getVehicle() {
+		return _vehicles.getItemAt(_vehicles.getSelectedIndex());
+		
 	}
 	public int getTicks() {
 		return (int) ticks.getValue();
 	}
 	public int getContClass() {
-		return (int) ContClass.getSelectedItem();
+		return ContClass.getItemAt(ContClass.getSelectedIndex());
 	}
 	
 

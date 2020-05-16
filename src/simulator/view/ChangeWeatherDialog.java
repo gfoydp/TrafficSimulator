@@ -120,14 +120,14 @@ public class ChangeWeatherDialog extends JDialog{
 		return _status;
 	}
 
-	public String getRoad() {
-		return _roads.getSelectedItem().toString();
+	public Road getRoad() {
+		return _roads.getItemAt(_roads.getSelectedIndex());
 	}
 	public int getTicks() {
 		return (int) ticks.getValue();
 	}
 	public Weather getWeather() {
-		return (Weather) weather.getSelectedItem();
+		return weather.getItemAt(weather.getSelectedIndex());
 	}
 
 }

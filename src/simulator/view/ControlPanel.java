@@ -189,7 +189,7 @@ public class ControlPanel extends JPanel implements TrafficSimObserver, ActionLi
 		_status = cccd.open(_vehicles);
 		if(_status == 1) {
 			List<Pair<String,Integer>> pair = new ArrayList<>();
-			pair.add(new Pair<String,Integer>(cccd.getVehicle(),cccd.getContClass()));
+			pair.add(new Pair<String,Integer>(cccd.getVehicle().toString(),cccd.getContClass()));
 			controller.addEvent(new NewSetContClassEvent(cccd.getTicks() + _time, pair));	
 		}
 		
@@ -199,7 +199,7 @@ public class ControlPanel extends JPanel implements TrafficSimObserver, ActionLi
 		cwd = new ChangeWeatherDialog(f);
 		if(cwd.open(_roads) == 1) {
 			List<Pair<String,Weather>> pair = new ArrayList<>();
-			pair.add(new Pair<String,Weather>(cwd.getRoad(),cwd.getWeather()));
+			pair.add(new Pair<String,Weather>(cwd.getRoad().toString(),cwd.getWeather()));
 			controller.addEvent(new SetWeatherEvent(cwd.getTicks() + _time, pair));
 		}
 		

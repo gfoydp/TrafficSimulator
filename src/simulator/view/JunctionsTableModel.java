@@ -15,7 +15,7 @@ import simulator.model.TrafficSimObserver;
 public class JunctionsTableModel extends AbstractTableModel implements TrafficSimObserver{
 	
 	
-	private static final long serialVersionUID = 1L; //NO SE
+	private static final long serialVersionUID = 1L;
 
 	private final String columnNames[] = {"Id", "Green", "Queues"};
 	private List<Junction> _junction;
@@ -72,8 +72,7 @@ public class JunctionsTableModel extends AbstractTableModel implements TrafficSi
 
 	@Override
 	public void onAdvanceStart(RoadMap map, List<Event> events, int time) {
-		updateTable(map.getJunctions());		
-		
+	
 	}
 
 	@Override

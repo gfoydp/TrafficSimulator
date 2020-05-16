@@ -15,7 +15,7 @@ import simulator.model.VehicleStatus;
 public class VehiclesTableModel extends AbstractTableModel implements TrafficSimObserver{
 	
 	
-	private static final long serialVersionUID = 1L; //NO SE
+	private static final long serialVersionUID = 1L;
 
 	private final String columnNames[] = {"Id", "Location", "Itinerary", "CO2 Class", "Max. Speed", "Speed", "Total CO2", "Distance"};
 	private List<Vehicle> _vehicles;

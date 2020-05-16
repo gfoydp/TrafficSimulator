@@ -70,14 +70,14 @@ public class ControlPanel extends JPanel implements TrafficSimObserver, ActionLi
 		
 		contaminacion = new JButton();
 		contaminacion.setIcon(new ImageIcon("resources/icons/co2class.png"));
-		contaminacion.setToolTipText("Change C02 Class");
+		contaminacion.setToolTipText("Change C02 Class of a Vehicle");
 		contaminacion.addActionListener(this);
 
 		toolbar.add(contaminacion);
 
 		weather = new JButton();
 		weather.setIcon(new ImageIcon("resources/icons/weather.png"));
-		weather.setToolTipText("Change Road Weather");
+		weather.setToolTipText("Change Weather of a Road");
 		weather.addActionListener(this);
 
 		toolbar.add(weather);
@@ -86,7 +86,7 @@ public class ControlPanel extends JPanel implements TrafficSimObserver, ActionLi
 
 		run = new JButton();
 		run.setIcon(new ImageIcon("resources/icons/run.png"));
-		run.setToolTipText("Start the simulator");
+		run.setToolTipText("Run the simulator");
 		run.addActionListener(this);
 	
 		toolbar.add(run);
@@ -155,7 +155,7 @@ public class ControlPanel extends JPanel implements TrafficSimObserver, ActionLi
 		else if(e.getSource() == contaminacion) Contaminacion();
 		else if(e.getSource() == weather) Weather();
 		else if(e.getSource() == run) Run();
-		else if(e.getSource() == stop) enableToolBar(true);
+		else if(e.getSource() == stop) Stop();
 		else if(e.getSource() == exit) Exit();
 
 
@@ -208,6 +208,11 @@ public class ControlPanel extends JPanel implements TrafficSimObserver, ActionLi
 		_stopped = false;
 		enableToolBar(false);
 		run_sim(getTicks());
+	}
+	
+	private void Stop() {
+		_stopped = true;
+		enableToolBar(true);
 	}
 	
 	private void Exit() {

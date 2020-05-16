@@ -104,6 +104,7 @@ public class ControlPanel extends JPanel implements TrafficSimObserver, ActionLi
 		ticks.setPreferredSize(new Dimension(80, 35));
 		ticks.setMinimumSize(new Dimension(80, 35));
 		ticks.setMaximumSize(new Dimension(80, 35));
+		
 		toolbar.add(ticks);
 		
 		toolbar.add(Box.createHorizontalGlue());
@@ -221,41 +222,36 @@ public class ControlPanel extends JPanel implements TrafficSimObserver, ActionLi
 	}
 	}
 	
-	@Override
-	public void onAdvanceStart(RoadMap map, List<Event> events, int time) {
+	void update(RoadMap map, int time) {
 		_roads = map.getRoads();
 		_vehicles = map.getVehicles();
 		_time = time;
 
+	}
+	
+	@Override
+	public void onAdvanceStart(RoadMap map, List<Event> events, int time) {
+		update(map,time);
 	}
 
 	@Override
 	public void onAdvanceEnd(RoadMap map, List<Event> events, int time) {
-		_roads = map.getRoads();
-		_vehicles = map.getVehicles();
-		_time = time;
-
+		update(map,time);
 	}
 
 	@Override
 	public void onEventAdded(RoadMap map, List<Event> events, Event e, int time) {
-
+		update(map,time);
 	}
 
 	@Override
 	public void onReset(RoadMap map, List<Event> events, int time) {
-		_roads = map.getRoads();
-		_vehicles = map.getVehicles();
-		_time = time;
-
+		update(map,time);
 	}
 
 	@Override
 	public void onRegister(RoadMap map, List<Event> events, int time) {
-		_roads = map.getRoads();
-		_vehicles = map.getVehicles();
-		_time = time;
-
+		update(map,time);
 	}
 
 	@Override

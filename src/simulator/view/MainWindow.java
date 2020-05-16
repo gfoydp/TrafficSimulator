@@ -19,7 +19,7 @@ import simulator.control.Controller;
 public class MainWindow extends JFrame{
 	
 
-	private static final long serialVersionUID = 1L; //NO SE.
+	private static final long serialVersionUID = 1L;
 	
 	private Controller _ctrl;
 
@@ -68,7 +68,7 @@ public class MainWindow extends JFrame{
 	tablesPanel.add(junctionsView);
 			
 	
-//		maps
+	// maps
 	JPanel mapView = createViewPanel(new MapComponent(_ctrl), "Map");
 	mapView.setPreferredSize(new Dimension(500, 400));
 	mapsPanel.add(mapView);
@@ -77,7 +77,6 @@ public class MainWindow extends JFrame{
 	mapView2.setPreferredSize(new Dimension(500, 400));
 	mapsPanel.add(mapView2);
 
-//		TODO add a map for MapByRoadComponent // ...
 
 	this.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 	this.pack();

@@ -99,7 +99,6 @@ public class JunctionsTableModel extends AbstractTableModel implements TrafficSi
 
 	@Override
 	public void onError(String err) {
-		// TODO Auto-generated method stub
 		
 	}
 

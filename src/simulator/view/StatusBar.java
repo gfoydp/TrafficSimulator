@@ -21,7 +21,6 @@ public class StatusBar extends JPanel implements TrafficSimObserver{
 	private Controller controller;
 	private JLabel _currTime; 
 	private JLabel _event;
-	List<Event> _events;
 	
 	
 	public StatusBar(Controller _ctrl) {
@@ -68,7 +67,7 @@ public class StatusBar extends JPanel implements TrafficSimObserver{
 
 	@Override
 	public void onError(String err) {
-		
+		_event.setText("ERROR " + err );
 	}
 
 }

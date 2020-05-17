@@ -268,7 +268,7 @@ public class ControlPanel extends JPanel implements TrafficSimObserver, ActionLi
 
 	@Override
 	public void onError(String err) {
-		
+		JOptionPane.showMessageDialog(getParent(),err, "Error",JOptionPane.ERROR_MESSAGE);
 	}
 	
 	public  int getTicks(){

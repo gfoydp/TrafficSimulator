@@ -26,7 +26,7 @@ public class ChangeWeatherDialog extends JDialog{
 	private static final long serialVersionUID = 1L;
 	private int _status;
 	private JComboBox<Road> _roads;
-	Weather w [] = {Weather.CLOUDY,Weather.RAINY, Weather.STORM, Weather.SUNNY,Weather.WINDY};
+	Weather w [] = { Weather.SUNNY,Weather.CLOUDY,Weather.RAINY,Weather.WINDY, Weather.STORM};
 	JSpinner ticks;
 	JComboBox<Weather> weather;
 

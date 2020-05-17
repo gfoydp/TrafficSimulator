@@ -134,7 +134,8 @@ public class ControlPanel extends JPanel implements TrafficSimObserver, ActionLi
 			try {
 				controller.run(1);
 				} catch (Exception e) {
-					JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+					JOptionPane.showMessageDialog(getParent(), e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+					enableToolBar(true);
 					_stopped = true;
 					return;
 					}
@@ -165,7 +166,7 @@ public class ControlPanel extends JPanel implements TrafficSimObserver, ActionLi
 	private void Load() {
 		fc = new JFileChooser();
 		fc.setCurrentDirectory(new File("resources/examples"));
-		int returnVal = fc.showOpenDialog(null);
+		int returnVal = fc.showOpenDialog(getParent());
 		if(returnVal == JFileChooser.APPROVE_OPTION){
 			File file = fc.getSelectedFile();
 			controller.reset();
@@ -174,8 +175,8 @@ public class ControlPanel extends JPanel implements TrafficSimObserver, ActionLi
 				in = new FileInputStream(file);
 				controller.loadEvents(in);
 			} catch (FileNotFoundException er) {
-				JOptionPane.showMessageDialog(toolbar,
-						 "Error to import the events.",
+				JOptionPane.showMessageDialog(getParent(),
+						 er.getMessage(),
 						 "Error",
 						 JOptionPane.ERROR_MESSAGE);
 				}
@@ -183,24 +184,35 @@ public class ControlPanel extends JPanel implements TrafficSimObserver, ActionLi
 		}
 	
 	private void Contaminacion() {
-
-		ChangeCO2ClassDialog cccd = new ChangeCO2ClassDialog(f);
-		_status = cccd.open(_vehicles);
-		if(_status == 1) {
+		try {
+		cccd = new ChangeCO2ClassDialog(f);
+		if(cccd.open(_vehicles) == 1) {
 			List<Pair<String,Integer>> pair = new ArrayList<>();
 			pair.add(new Pair<String,Integer>(cccd.getVehicle().toString(),cccd.getContClass()));
 			controller.addEvent(new NewSetContClassEvent(cccd.getTicks() + _time, pair));	
 		}
-		
+		}catch (IllegalArgumentException er) {
+			JOptionPane.showMessageDialog(getParent(),
+					 er.getMessage(),
+					 "Error",
+					 JOptionPane.ERROR_MESSAGE);
+			}
 	}
 	
 	private void Weather() {
+		try {
 		cwd = new ChangeWeatherDialog(f);
 		if(cwd.open(_roads) == 1) {
 			List<Pair<String,Weather>> pair = new ArrayList<>();
 			pair.add(new Pair<String,Weather>(cwd.getRoad().toString(),cwd.getWeather()));
 			controller.addEvent(new SetWeatherEvent(cwd.getTicks() + _time, pair));
 		}
+		}catch (IllegalArgumentException er) {
+			JOptionPane.showMessageDialog(getParent(),
+					 er.getMessage(),
+					 "Error",
+					 JOptionPane.ERROR_MESSAGE);
+			}
 		
 	}
 	
@@ -217,7 +229,7 @@ public class ControlPanel extends JPanel implements TrafficSimObserver, ActionLi
 	
 	private void Exit() {
 		ImageIcon icon = new ImageIcon("resources/icons/exit.png");
-	   	int n = JOptionPane.showOptionDialog(this, "Are sure you want to quit?", "Quit", JOptionPane.YES_NO_OPTION,
+	   	int n = JOptionPane.showOptionDialog(getParent(), "Are sure you want to quit?", "Quit", JOptionPane.YES_NO_OPTION,
 	   			JOptionPane.PLAIN_MESSAGE, icon, null, null);
 	   	if(n == 0) System.exit(0);
 	}

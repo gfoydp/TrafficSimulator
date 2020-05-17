@@ -109,12 +109,13 @@ public class ChangeCO2ClassDialog extends JDialog{
 		setVisible(false);
 	}
 
-	public int open(List<Vehicle> vehicles) {
+	public int open(List<Vehicle> vehicles){
+		if(vehicles.isEmpty()) throw new IllegalArgumentException("Vehicles empty list or not events loaded");
 		_vehicles.removeAllItems();
 		for (Vehicle v : vehicles) {
 			_vehicles.addItem(v);
 		}
-
+		setLocationRelativeTo(getParent());
 		setVisible(true);
 
 		return _status;

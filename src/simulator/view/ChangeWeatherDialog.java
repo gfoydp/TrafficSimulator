@@ -110,11 +110,12 @@ public class ChangeWeatherDialog extends JDialog{
 	}
 
 	public int open(List<Road> roads) {
-
+		if(roads.isEmpty()) throw new IllegalArgumentException("Roads empty list or not events loaded");
 		_roads.removeAllItems();
 		for (Road v : roads)
 			_roads.addItem(v);
 		
+			setLocationRelativeTo(getParent());
 			setVisible(true);
 
 		return _status;

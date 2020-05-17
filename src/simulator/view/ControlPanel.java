@@ -37,7 +37,7 @@ public class ControlPanel extends JPanel implements TrafficSimObserver, ActionLi
 	private JToolBar toolbar;
 	private Frame f;
 	private boolean _stopped;
-	private int _time, _status;
+	private int _time;
 	List<Road> _roads;
 	List<Vehicle> _vehicles ;
 

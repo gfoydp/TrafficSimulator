@@ -42,11 +42,16 @@ public class TrafficSimulator implements Observable<TrafficSimObserver>{
 				eventos.remove(i);
 			}else i++;
 		}
+		try {
 		for(int j = 0; j < mapa.getJunctions().size(); j++) {
 			mapa.getJunctions().get(j).advance(tiempo);
 		}
 		for (int j = 0; j < mapa.getRoads().size(); j++) {
 			mapa.getRoads().get(j).advance(tiempo);	
+		}
+		}catch(Exception e) {
+			for(TrafficSimObserver o : observadores) 
+				o.onError(e.getMessage());
 		}
 		for(TrafficSimObserver o : observadores) 
 			o.onAdvanceEnd(mapa, eventos, tiempo);

@@ -176,7 +176,7 @@ public class Main {
 		// TODO complete this method to start the simulation
 		
 	}
-	private static void startGUIMode() throws IOException { //No se si esta bien.
+	private static void startGUIMode() throws IOException {
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override
 			public void run() {

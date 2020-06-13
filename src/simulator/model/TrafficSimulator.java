@@ -90,6 +90,5 @@ public class TrafficSimulator implements Observable<TrafficSimObserver>{
 	@Override
 	public void removeObserver(TrafficSimObserver o) {
 		observadores.remove(o);
-		o.onRegister(mapa, eventos, tiempo);
 	}
 }

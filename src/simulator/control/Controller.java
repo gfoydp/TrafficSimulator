@@ -5,8 +5,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintStream;
 
-import javax.annotation.processing.FilerException;
-
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.JSONTokener;

@@ -14,6 +14,7 @@ public class CityRoad extends Road {
 		}
 		if(totalCont >= x)
 			totalCont -= x;
+		else totalCont = 0;
 	}
 
 	@Override

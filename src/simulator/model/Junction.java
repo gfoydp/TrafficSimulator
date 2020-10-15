@@ -50,7 +50,7 @@ public class Junction extends SimulatedObject {
 
 	@Override
 	void advance(int time) {
-		
+
 		if(indiceDeSemaforoEnVerde != -1 && !colasList.isEmpty()) {
 			List<Vehicle> v = estrategiaExtraerElementosCola.dequeue(colasList.get(indiceDeSemaforoEnVerde));
 			for(int i = 0; i < v.size(); i++) {
